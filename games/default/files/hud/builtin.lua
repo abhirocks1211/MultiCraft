@@ -1,12 +1,12 @@
-HUD_SB_SIZE = {x = 24, y = 24}
-HUD_HEALTH_POS = {x = 0.5, y = 1}
-HUD_HEALTH_OFFSET = {x = -248, y = -93}
-HUD_AIR_POS = {x = 0.5, y = 1}
-HUD_AIR_OFFSET = {x = 6, y = -124}
-HUD_HUNGER_POS = {x = 0.5, y = 1}
-HUD_HUNGER_OFFSET =  {x = 6, y = -93}
-HUD_ARMOR_POS = {x = 0.5, y = 1}
-HUD_ARMOR_OFFSET = {x = -248, y = -124}
+HUD_SB_SIZE       = {x = 24,   y = 24}
+HUD_HEALTH_POS    = {x = 0.5,  y = 1}
+HUD_HEALTH_OFFSET = {x = -259, y = -110}
+HUD_AIR_POS       = {x = 0.5,  y = 1}
+HUD_AIR_OFFSET    = {x = 15,    y = -135}
+HUD_HUNGER_POS    = {x = 0.5,  y = 1}
+HUD_HUNGER_OFFSET = {x = 15,    y = -110}
+HUD_ARMOR_POS     = {x = 0.5,  y = 1}
+HUD_ARMOR_OFFSET  = {x = -259, y = -135}
 
 -- read hud.conf settings
 function hud.read_conf()
@@ -20,15 +20,8 @@ end
 
 hud.read_conf()
 
-local damage_enabled = minetest.settings:get_bool("enable_damage")
-
 hud.show_hunger = minetest.get_modpath("hunger") ~= nil
 hud.show_armor = minetest.get_modpath("3d_armor") ~= nil
-
-if damage_enabled ~= true then
-	hud.show_armor = false
-	return
-end
 
 hud.register("health", {
 	hud_elem_type = "statbar",
