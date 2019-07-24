@@ -47,8 +47,8 @@ playereffects.autosave_time = 10
 
 
 --[=[ Load inactive_effects and last_effect_id from playereffects, if this file exists  ]=]
-do
-	if playereffects.save then
+if playereffects.save then
+	do
 		local filepath = minetest.get_worldpath().."/playereffects"
 		local file = io.open(filepath, "r")
 		if file then
@@ -415,9 +415,22 @@ minetest.register_on_joinplayer(function(player)
 	end
 end)
 
-if playereffects.use_autosave then
-	playereffects.autosave_timer = 0
-	minetest.register_globalstep(function(dtime)
+playereffects.globalstep_timer = 0
+playereffects.autosave_timer = 0
+minetest.register_globalstep(function(dtime)
+	playereffects.globalstep_timer = playereffects.globalstep_timer + dtime
+	-- Update HUDs of all players
+	if(playereffects.globalstep_timer >= 1) then
+		playereffects.globalstep_timer = 0
+	
+		local players = minetest.get_connected_players()
+		for p=1, #players do
+			playereffects.hud_update(players[p])
+		end
+	end
+	
+	-- Autosave into file
+	if playereffects.use_autosave then
 		playereffects.autosave_timer = playereffects.autosave_timer + dtime
 
 		-- Autosave into file
@@ -426,25 +439,15 @@ if playereffects.use_autosave then
 			minetest.log("action", "[playereffects] Autosaving mod data to playereffects ...")
 			playereffects.save_to_file()
 		end
-	end)
-end
-
-minetest.register_playerstep(function(dtime, playernames)
-	-- Update HUDs of all players
-	for _, name in pairs(playernames) do
-		playereffects.hud_update(name)
 	end
-end, minetest.is_singleplayer()) -- Force step in singlplayer mode only
+end)
 
 --[=[ HUD ]=]
 function playereffects.hud_update(player)
 	if(playereffects.use_hud == true) then
 		local now = os.time()
-		local player = minetest.get_player_by_name(player)
-		if not player or not player:is_player() then
-			return
-		end
-		local hudinfos = playereffects.hudinfos[player]
+		local playername = player:get_player_name()
+		local hudinfos = playereffects.hudinfos[playername]
 		if(hudinfos ~= nil) then
 			for effect_id, hudinfo in pairs(hudinfos) do
 				local effect = playereffects.effects[effect_id]
