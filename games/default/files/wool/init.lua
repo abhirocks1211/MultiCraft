@@ -1,10 +1,13 @@
 local dyes = dye.dyes
 
+-- Intllib
+local S = intllib.Getter()
+
 for i = 1, #dyes do
-	local name, desc = unpack(dyes[i])
+	local name, desc, desc2 = unpack(dyes[i])
 
 	minetest.register_node("wool:" .. name, {
-		description = desc .. " Wool",
+		description = desc2 .. " " .. S("Wool"),
 		tiles = {"wool_" .. name .. ".png"},
 		is_ground_content = false,
 		groups = {snappy = 2, choppy = 2, oddly_breakable_by_hand = 3,

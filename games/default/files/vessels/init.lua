@@ -1,3 +1,6 @@
+-- Intllib
+local S = intllib.Getter()
+
 local vessels_shelf_formspec =
 	"size[9,7;]" ..
 	"list[context;vessels;0,0.3;9,2;]" ..
@@ -13,7 +16,7 @@ local function get_vessels_shelf_formspec(inv)
 end
 
 minetest.register_node("vessels:shelf", {
-	description = "Potion Shelf",
+	description = S("Potion Shelf"),
 	tiles = {"default_wood.png", "default_wood.png", "default_wood.png",
 		"default_wood.png", "vessels_shelf.png", "vessels_shelf.png"},
 	paramtype2 = "facedir",
@@ -74,7 +77,7 @@ minetest.register_craft({
 })
 
 minetest.register_node("vessels:glass_bottle", {
-	description = "Empty Glass Bottle",
+	description = S("Empty Glass Bottle"),
 	drawtype = "plantlike",
 	tiles = {"vessels_glass_bottle.png"},
 	inventory_image = "vessels_glass_bottle.png",

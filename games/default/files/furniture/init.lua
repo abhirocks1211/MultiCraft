@@ -3,25 +3,30 @@ ts_furniture = {}
 -- If true, you can sit on chairs and benches, when right-click them.
 ts_furniture.enable_sitting = false
 
+-- Intllib
+local S = intllib.Getter()
+
 -- The following code is from "Get Comfortable [cozy]" (by everamzah; published under WTFPL).
 -- Thomas S. modified it, so that it can be used in this mod
---[[minetest.register_globalstep(function(dtime)
-	local players = minetest.get_connected_players()
-	for i = 1, #players do
-		local name = players[i]:get_player_name()
-		if player_api.player_attached[name] and not players[i]:get_attach() and
-				(players[i]:get_player_control().up == true or
-						players[i]:get_player_control().down == true or
-						players[i]:get_player_control().left == true or
-						players[i]:get_player_control().right == true or
-						players[i]:get_player_control().jump == true) then
-			players[i]:set_eye_offset({ x = 0, y = 0, z = 0 }, { x = 0, y = 0, z = 0 })
-			players[i]:set_physics_override(1, 1, 1)
-			player_api.player_attached[name] = false
-			player_api.set_animation(players[i], "stand", 30)
+if ts_furniture.enable_sitting then
+	minetest.register_globalstep(function(dtime)
+		local players = minetest.get_connected_players()
+		for i = 1, #players do
+			local name = players[i]:get_player_name()
+			if player_api.player_attached[name] and not players[i]:get_attach() and
+					(players[i]:get_player_control().up == true or
+							players[i]:get_player_control().down == true or
+							players[i]:get_player_control().left == true or
+							players[i]:get_player_control().right == true or
+							players[i]:get_player_control().jump == true) then
+				players[i]:set_eye_offset({ x = 0, y = 0, z = 0 }, { x = 0, y = 0, z = 0 })
+				players[i]:set_physics_override(1, 1, 1)
+				player_api.player_attached[name] = false
+				player_api.set_animation(players[i], "stand", 30)
+			end
 		end
-	end
-end)
+	end)
+end
 
 ts_furniture.sit = function(name, pos)
 	local player = minetest.get_player_by_name(name)
@@ -37,11 +42,11 @@ ts_furniture.sit = function(name, pos)
 		player_api.player_attached[name] = true
 		player_api.set_animation(player, "sit", 30)
 	end
-end]]
+end
 
 local furnitures = {
 	["chair"] = {
-		description = "Chair",
+		description = S("Chair"),
 		sitting = true,
 		nodebox = {
 			{ -0.3, -0.5, 0.2, -0.2, 0.5, 0.3 }, -- foot 1
@@ -60,7 +65,7 @@ local furnitures = {
 		end
 	},
 	["table"] = {
-		description = "Table",
+		description = S("Table"),
 		nodebox = {
 			{ -0.4, -0.5, -0.4, -0.3, 0.4, -0.3 }, -- foot 1
 			{ 0.3, -0.5, -0.4, 0.4, 0.4, -0.3 }, -- foot 2
@@ -77,7 +82,7 @@ local furnitures = {
 		end
 	},
 	["small_table"] = {
-		description = "Small Table",
+		description = S("Small Table"),
 		nodebox = {
 			{ -0.4, -0.5, -0.4, -0.3, 0.1, -0.3 }, -- foot 1
 			{ 0.3, -0.5, -0.4, 0.4, 0.1, -0.3 }, -- foot 2
@@ -93,7 +98,7 @@ local furnitures = {
 		end
 	},
 	["tiny_table"] = {
-		description = "Tiny Table",
+		description = S("Tiny Table"),
 		nodebox = {
 			{ -0.5, -0.1, -0.5, 0.5, 0, 0.5 }, -- table top
 			{ -0.4, -0.5, -0.5, -0.3, -0.1, 0.5 }, -- foot 1
@@ -107,7 +112,7 @@ local furnitures = {
 		end
 	},
 	["bench"] = {
-		description = "Bench",
+		description = S("Bench"),
 		sitting = true,
 		nodebox = {
 			{ -0.5, -0.1, 0, 0.5, 0, 0.5 }, -- seating

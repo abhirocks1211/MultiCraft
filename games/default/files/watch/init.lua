@@ -2,6 +2,9 @@ function round(num)
 	return math.floor(num + 0.5)
 end
 
+-- Intllib
+local S = intllib.Getter()
+
 minetest.register_playerstep(function(dtime, playernames)
 	local now = round((minetest.get_timeofday() * 24) % 12)
 	if now == 12 then now = 0 end
@@ -38,23 +41,23 @@ local images = {
 }
 
 local i
-for i,img in ipairs(images) do
+for i, img in ipairs(images) do
 	local inv = 1
 	if i == 1 then
 		inv = 0
 	end
 	minetest.register_tool("watch:"..(i-1), {
-		description = "Watch",
+		description = S("Watch"),
 		inventory_image = img,
 		groups = {not_in_creative_inventory=inv}
 	})
 end
 
 minetest.register_craft({
-	output = 'watch:0',
+	output = "watch:0",
 	recipe = {
-	{'', 'default:gold_ingot', ''},
-	{'default:gold_ingot', 'mesecons:wire_00000000_off', 'default:gold_ingot'},
-	{'', 'default:gold_ingot', ''}
-	},
+		{"", "default:gold_ingot", ""},
+		{"default:gold_ingot", "mesecons:wire_00000000_off", "default:gold_ingot"},
+		{"", "default:gold_ingot", ""}
+	}
 })

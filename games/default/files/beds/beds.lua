@@ -1,5 +1,7 @@
+local S = beds.intllib
+
 beds.register_bed("beds:bed", {
-	description = "Bed",
+	description = S("Bed"),
 	inventory_image = "beds_bed_inv.png",
 	wield_image = "beds_bed_inv.png",
 	tiles = {"beds_bed.png"},

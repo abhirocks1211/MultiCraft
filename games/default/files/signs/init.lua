@@ -1,5 +1,8 @@
 signs = {}
 
+-- Intllib
+local S = intllib.Getter()
+
 signs.sign_positions = {
 	[0] = {{x =  0.0075, y = 0.18, z = -0.065},  math.pi},
 	[1] = {{x = -0.065,  y = 0.18, z =  0.0075}, math.pi / 2},
@@ -124,7 +127,7 @@ minetest.register_lbm({
 })
 
 minetest.register_node("signs:sign", {
-	description = "Sign",
+	description = S("Sign"),
 	tiles = {"default_wood.png"},
 	drawtype = "nodebox",
 	paramtype = "light",
@@ -156,7 +159,7 @@ minetest.register_node("signs:sign", {
 	end,
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
-		meta:set_string("formspec", "field[Dtext;Enter your text:;${sign_text}]")
+		meta:set_string("formspec", "field[Dtext;" .. S("Enter your text:") .. ";${sign_text}]")
 	end,
 	on_destruct = function(pos)
 		for _, obj in pairs(minetest.get_objects_inside_radius(pos, 0.5)) do
@@ -205,7 +208,7 @@ minetest.register_node("signs:sign", {
 })
 
 minetest.register_node("signs:wall_sign", {
-	description = "Sign",
+	description = S("Sign"),
 	tiles = {"default_wood.png"},
 	drawtype = "nodebox",
 	paramtype = "light",
@@ -219,7 +222,7 @@ minetest.register_node("signs:wall_sign", {
 	drop = "signs:sign",
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
-		meta:set_string("formspec", "field[Dtext;Enter your text:;${sign_text}]")
+		meta:set_string("formspec", "field[Dtext;" .. S("Enter your text:") .. ";${sign_text}]")
 	end,
 	on_destruct = function(pos)
 		for _, obj in pairs(minetest.get_objects_inside_radius(pos, 0.5)) do

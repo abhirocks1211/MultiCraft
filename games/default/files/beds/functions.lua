@@ -5,6 +5,8 @@ if enable_respawn == nil then
 	enable_respawn = true
 end
 
+local S = beds.intllib
+
 -- Helper functions
 
 local function get_look_yaw(pos)
@@ -150,7 +152,7 @@ function beds.on_rightclick(pos, player)
 		if beds.player[name] then
 			lay_down(player, nil, nil, false)
 		end
-		minetest.chat_send_player(name, "You can only sleep at night.")
+		minetest.chat_send_player(name, S("You can only sleep at night."))
 		return
 	end
 
