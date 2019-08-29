@@ -35,8 +35,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 using namespace irr::core;
 
-extern Settings *g_settings;
-
 const char **touchgui_button_imagenames = (const char *[]) {
 	"up_one_btn.png",
 	"up_two_btn.png",
@@ -61,7 +59,7 @@ const char **touchgui_button_imagenames = (const char *[]) {
 };
 
 static irr::EKEY_CODE id2keycode(touch_gui_button_id id) {
-	std::string key = "";
+	std::string key = key;
 	switch (id) {
 		case forward_one:
 			key = "forward";
@@ -125,8 +123,8 @@ static irr::EKEY_CODE id2keycode(touch_gui_button_id id) {
 		case empty_id:
 			key = "forward";
 			break;
-		/*case after_last_element_id:
-			break;*/
+		case after_last_element_id:
+			break;
 	}
 	assert(!key.empty());
 	return keyname_to_keycode(g_settings->get("keymap_" + key).c_str());
@@ -200,7 +198,7 @@ void TouchScreenGUI::initButton(touch_gui_button_id id, rect<s32> button_rect,
 void TouchScreenGUI::init(ISimpleTextureSource *tsrc) {
 	assert(tsrc != nullptr);
 
-	u32 control_pad_size =
+	float control_pad_size =
 			MYMIN(m_screensize.Y / 1.5,
 					porting::getDisplayDensity() * g_settings->getFloat("hud_scaling") * 260);
 
@@ -414,25 +412,6 @@ bool TouchScreenGUI::isHUDButton(const SEvent &event) {
 	return false;
 }
 
-bool TouchScreenGUI::isReleaseHUDButton(size_t eventID) {
-	std::map<size_t,irr::EKEY_CODE>::iterator iter = m_hud_ids.find(eventID);
-
-	if (iter != m_hud_ids.end()) {
-		SEvent *translated = new SEvent();
-		memset(translated, 0, sizeof(SEvent));
-		translated->EventType            = irr::EET_KEY_INPUT_EVENT;
-		translated->KeyInput.Key         = iter->second;
-		translated->KeyInput.PressedDown = false;
-		translated->KeyInput.Control     = false;
-		translated->KeyInput.Shift       = false;
-		m_receiver->OnEvent(*translated);
-		m_hud_ids.erase(iter);
-		delete translated;
-		return true;
-	}
-	return false;
-}
-
 void TouchScreenGUI::handleButtonEvent(touch_gui_button_id button,
 										size_t eventID, bool action) {
 	button_info *btn = &m_buttons[button];
@@ -485,11 +464,7 @@ void TouchScreenGUI::handleReleaseEvent(size_t evt_id) {
 	if (button != after_last_element_id) {
 		handleButtonEvent(button, evt_id, false);
 	}
-		// handle hud button events
-	else if (isReleaseHUDButton(evt_id)) {
-		// nothing to do here
-	}
-		// handle the point used for moving view
+	// handle the point used for moving view
 	else if (evt_id == m_move_id) {
 		m_move_id = -1;
 
@@ -525,10 +500,6 @@ void TouchScreenGUI::handleReleaseEvent(size_t evt_id) {
 						->getRayFromScreenCoordinates(
 							v2s32(m_move_downlocation.X, m_move_downlocation.Y));
 		}
-	} else {
-		infostream
-				<< "TouchScreenGUI::translateEvent released unknown button: "
-				<< evt_id << std::endl;
 	}
 
 	for (std::vector<id_status>::iterator iter = m_known_ids.begin();
